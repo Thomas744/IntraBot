@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # Company-Internal-Chatbot-with-Role-Based-Access-Control-RBAC---Group-1
-=======
-# Company Internal Chatbot with Role-Based Access Control (RBAC)
 
 A secure **Company Internal Chatbot** built using **Retrieval-Augmented Generation (RAG)** and **strict Role-Based Access Control (RBAC)**.  
 The system ensures that users can **only retrieve information authorized for their role**, eliminating cross-department data leakage.
@@ -229,4 +226,3 @@ Chatbot/
 │
 └── README.md
 ```
->>>>>>> f29a59e (Milestone 1: RBAC-enabled RAG pipeline with secure retrieval and demo)
