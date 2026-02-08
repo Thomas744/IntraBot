@@ -1,61 +1,46 @@
 import re
-import hashlib
-from typing import List
-
+from typing import List, Tuple
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 
 
-def normalize_query(query: str) -> str:
-    query = query.lower()
-    query = query.strip()
-    query = re.sub(r"\s+", " ", query)
-    return query
+def normalize(text: str) -> set:
+    return set(re.findall(r"[a-zA-Z]{3,}", text.lower()))
 
 
-def _role_allowed(accessible_roles: str, user_role: str) -> bool:
-    doc_roles = {r.strip() for r in accessible_roles.split(",")}
-    return user_role in doc_roles
+def is_context_relevant(query: str, doc: Document) -> bool:
+    query_tokens = normalize(query)
+    content_tokens = normalize(doc.page_content)
+    return len(query_tokens & content_tokens) >= 2
 
 
-def _content_hash(text: str) -> str:
-    return hashlib.md5(text.encode("utf-8")).hexdigest()
+def role_allowed(doc: Document, user_role: str) -> bool:
+    roles = {
+        r.strip()
+        for r in doc.metadata.get("accessible_roles", "").split(",")
+    }
+    return user_role in roles
 
 
-def secure_search(
+def secure_search_with_scores(
     vector_store: Chroma,
     query: str,
     role: str,
     k: int = 5,
-) -> List[Document]:
+) -> List[Tuple[Document, float]]:
 
-    normalized_query = normalize_query(query)
+    results = vector_store.similarity_search_with_score(query, k=k * 5)
 
-    results = vector_store.similarity_search(
-        normalized_query,
-        k=k * 5,
-    )
+    safe_results: List[Tuple[Document, float]] = []
 
-    seen = set()
-    safe_results: List[Document] = []
-
-    for doc in results:
-        if not _role_allowed(doc.metadata.get("accessible_roles", ""), role):
+    for doc, score in results:
+        if not role_allowed(doc, role):
             continue
 
-        if len(doc.page_content.split()) < 40:
+        if not is_context_relevant(query, doc):
             continue
 
-        dedup_key = (
-            doc.metadata.get("source_path"),
-            _content_hash(doc.page_content[:300]),
-        )
-
-        if dedup_key in seen:
-            continue
-
-        seen.add(dedup_key)
-        safe_results.append(doc)
+        safe_results.append((doc, score))
 
         if len(safe_results) == k:
             break

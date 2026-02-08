@@ -16,6 +16,9 @@ __pycache__/
 backend/app/vector_db/
 backend/app/vector_db/**
 
+backend/app/db/users.db
+backend/app/auth/access_audit.log
+
 # Chroma temp / locks
 *.bin
 *.lock

@@ -12,7 +12,11 @@ OVERLAP = 40
 
 
 def _clean(text: str) -> str:
-    return re.sub(r"\s+", " ", text).strip()
+    text = re.sub(r"[-_]{3,}", " ", text)
+    text = re.sub(r"(?:-\s*){5,}", " ", text)
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
 
 
 def _read_file(path: Path) -> str:
