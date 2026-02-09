@@ -254,7 +254,7 @@ The requested information is not available in the provided documents.
 From the project root:
 
 ```bash
-python -m uvicorn backend.app.main:app --reload
+python -m uvicorn backend.main:app --reload
 ```
 - API: http://127.0.0.1:8000
 
@@ -264,47 +264,44 @@ python -m uvicorn backend.app.main:app --reload
 ```bash
 Chatbot/
 ├── backend/
-│   ├── app/
-│   │   ├── auth/                    # Authentication & authorization
-│   │   │   ├── auth_utils.py        # JWT creation & verification
-│   │   │   ├── password_utils.py    # bcrypt password hashing
-│   │   │   ├── dependencies.py      # Auth dependency (JWT → user)
-│   │   │   ├── audit_logger.py      # Access audit logging
-│   │   │   └── access_audit.log     # Auth access logs
-│   │   │
-│   │   ├── db/                      # User database (SQLite)
-│   │   │   ├── database.py          # DB engine & session
-│   │   │   ├── models.py            # User table (username as PK)
-│   │   │   ├── user_repository.py   # DB access layer
-│   │   │   ├── init_db.py           # Add/Delete users interactively
-│   │   │   └── users.db             # SQLite user database
-│   │   │
-│   │   ├── rag/                     # RAG + RBAC pipeline
-│   │   │   ├── rbac.py              # Role → document access rules
-│   │   │   ├── preprocessing.py     # Parse, clean, chunk, metadata
-│   │   │   ├── vector_store.py      # Embeddings + ChromaDB
-│   │   │   ├── retriever.py         # Secure RBAC-aware retrieval
-│   │   │   ├── citation_utils.py    # Source attribution
-│   │   │   ├── confidence_utils.py  # Confidence scoring
-│   │   │   ├── rag_pipeline.py      # Full RAG orchestration
-│   │   │   ├── pipeline.py          # Vector-store build pipeline
-│   │   │   └── __init__.py
-│   │   │
-│   │   ├── llm/                     # LLM integration
-│   │   │   ├── llm_client.py        # HuggingFace LLM wrapper
-│   │   │   ├── prompt_templates.py  # Grounded prompt templates
-│   │   │   └── __init__.py
-│   │   │
-│   │   ├── models/
-│   │   │   └── user.py              # Pydantic User model
-│   │   │
-│   │   ├── routes/
-│   │   │   ├── auth_routes.py       # /login endpoint
-│   │   │   └── chat_routes.py       # /query (RAG + RBAC)
-│   │   │
-│   │   └── main.py                  # FastAPI entry point
+│   ├── auth/                    # Authentication & authorization
+│   │   ├── auth_utils.py        # JWT creation & verification
+│   │   ├── password_utils.py    # bcrypt password hashing
+│   │   ├── dependencies.py      # Auth dependency (JWT → user)
+│   │   ├── audit_logger.py      # Access audit logging
+│   │   └── access_audit.log     # Auth access logs
 │   │
-│   └── requirements.txt             # Backend dependencies
+│   ├── db/                      # User database (SQLite)
+│   │   ├── database.py          # DB engine & session
+│   │   ├── models.py            # User table (username as PK)
+│   │   ├── user_repository.py   # DB access layer
+│   │   ├── init_db.py           # Add/Delete users interactively
+│   │   └── users.db             # SQLite user database
+│   │
+│   ├── rag/                     # RAG + RBAC pipeline
+│   │   ├── rbac.py              # Role → document access rules
+│   │   ├── preprocessing.py     # Parse, clean, chunk, metadata
+│   │   ├── vector_store.py      # Embeddings + ChromaDB
+│   │   ├── retriever.py         # Secure RBAC-aware retrieval
+│   │   ├── citation_utils.py    # Source attribution
+│   │   ├── confidence_utils.py  # Confidence scoring
+│   │   ├── rag_pipeline.py      # Full RAG orchestration
+│   │   ├── pipeline.py          # Vector-store build pipeline
+│   │   └── __init__.py
+│   │
+│   ├── llm/                     # LLM integration
+│   │   ├── llm_client.py        # HuggingFace LLM wrapper
+│   │   ├── prompt_templates.py  # Grounded prompt templates
+│   │   └── __init__.py
+│   │
+│   ├── models/
+│   │   └── user.py              # Pydantic User model
+│   │
+│   ├── routes/
+│   │   ├── auth_routes.py       # /login endpoint
+│   │   └── chat_routes.py       # /query (RAG + RBAC)
+│   │
+│   └── main.py                  # FastAPI entry point
 │
 ├── data/
 │   └── Fintech-data/
@@ -317,5 +314,6 @@ Chatbot/
 ├── frontend/
 │   └── streamlit_app.py              # (Planned UI)
 │
+├──  requirements.txt             # Backend dependencies
 └── README.md
 ```

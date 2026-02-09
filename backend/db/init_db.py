@@ -1,6 +1,6 @@
-from backend.app.db.database import engine, Base, SessionLocal
-from backend.app.db.models import UserDB
-from backend.app.auth.password_utils import hash_password
+from backend.db.database import engine, Base, SessionLocal
+from backend.db.models import UserDB
+from backend.auth.password_utils import hash_password
 
 # Ensure tables exist
 Base.metadata.create_all(bind=engine)

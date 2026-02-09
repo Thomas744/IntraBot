@@ -13,11 +13,11 @@ __pycache__/
 **/.env
 
 # Vector database (auto-generated)
-backend/app/vector_db/
-backend/app/vector_db/**
+backend/vector_db/
+backend/vector_db/**
 
-backend/app/db/users.db
-backend/app/auth/access_audit.log
+backend/db/users.db
+backend/auth/access_audit.log
 
 # Chroma temp / locks
 *.bin

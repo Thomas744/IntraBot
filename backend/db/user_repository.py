@@ -1,6 +1,6 @@
-from backend.app.db.database import SessionLocal
-from backend.app.db.models import UserDB
-from backend.app.models.user import User
+from backend.db.database import SessionLocal
+from backend.db.models import UserDB
+from backend.models.user import User
 
 
 def get_user_by_username(username: str):

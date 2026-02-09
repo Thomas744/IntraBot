@@ -5,7 +5,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 from langchain_core.documents import Document
 
-from backend.app.rag.rbac import roles_for_department
+from backend.rag.rbac import roles_for_department
 
 MAX_TOKENS = 256
 OVERLAP = 40

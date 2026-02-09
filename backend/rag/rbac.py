@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Dict, List
 
-BASE_DATA_PATH = Path(__file__).resolve().parents[3] / "data" / "Fintech-data"
+BASE_DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "Fintech-data"
 
 # Role → allowed document folders (PDF compliant)
 ROLE_DOCUMENT_MAP: Dict[str, List[str]] = {
