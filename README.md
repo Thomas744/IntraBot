@@ -252,82 +252,77 @@ The requested information is not available in the provided documents.
 
 ✔️ Hallucination prevented
 ✔️ Grounding enforced
----
-
-
-## 🧰 Tech Stack
-
-The project is built entirely using free and open-source technologies along with free-tier AI APIs, ensuring accessibility, reproducibility, and ease of deployment.
 
 ---
 
 ### 🖥️ Backend
-
-Component | Technology
-Web Framework | FastAPI
-API Server | Uvicorn
-Authentication | JWT (python-jose)
-Password Security | bcrypt (passlib)
-Database | SQLite (SQLAlchemy ORM)
-Access Control | Dependency-based RBAC enforcement
-Environment Config | python-dotenv
+| Component | Technology |
+|---------|------------|
+| Web Framework | FastAPI |
+| API Server | Uvicorn |
+| Authentication | JWT (python-jose) |
+| Password Security | bcrypt (passlib) |
+| Database | SQLite (SQLAlchemy ORM) |
+| Access Control | Dependency-based RBAC enforcement |
+| Environment Config | python-dotenv |
 
 ---
 
 ### 🧠 Retrieval & AI
-
-Component | Technology
-Embedding Model | sentence-transformers/all-MiniLM-L6-v2
-Vector Database | ChromaDB (Persistent Storage)
-LLM | Gemini API (gemini-2.5-flash)
-RAG Strategy | Secure Retrieval-Augmented Generation (RBAC-aware)
-Prompt Engineering | Custom grounded prompt templates
-Confidence Scoring | Similarity-score–based scoring
+| Component | Technology |
+|---------|------------|
+| Embedding Model | sentence-transformers/all-MiniLM-L6-v2 |
+| Vector Database | ChromaDB (Persistent Storage) |
+| LLM | Gemini API (gemini-2.5-flash) |
+| RAG Strategy | Secure Retrieval-Augmented Generation (RBAC-aware) |
+| Prompt Engineering | Custom grounded prompt templates |
+| Confidence Scoring | Vector-distance-based scoring |
 
 ---
 
 ### 📄 Data Processing
-
-Component | Technology
-Document Formats | Markdown (.md), CSV (.csv), Text (.txt)
-Text Processing | Regex cleaning + SentenceTransformer tokenizer
-Chunking Strategy | Token-aware sliding window chunking
-Metadata Injection | Role-based department metadata per chunk
-Data Handling | Pandas
+| Component | Technology |
+|---------|------------|
+| Document Formats | Markdown (`.md`), CSV (`.csv`), Text (`.txt`) |
+| Text Processing | Regex cleaning + SentenceTransformer tokenizer |
+|Chunking Strategy | Token-aware sliding window chunking|
+|Metadata Injection | Role-based department metadata per chunk|
+|Data Handling | Pandas|
 
 ---
 
 ### 🖥️ Frontend
-
-Component | Technology
-Web Interface | Streamlit
-User Interaction | Chat-based conversational UI
-Authentication Flow | JWT-based secure login
-Source Display | Inline source citations
-API Communication | Requests (HTTP client)
+| Component | Technology |
+|---------|------------|
+|Web Interface | Streamlit|
+|User Interaction | Chat-based conversational UI|
+|Authentication Flow | JWT-based secure login|
+|Source Display | Inline source citations|
+|API Communication | Requests (HTTP client)|
 
 ---
 
 ### 🔧 Dev & Utilities
-
-Component | Technology
-Language | Python 3.11+
-Version Control | Git & GitHub
-Logging | Python Logging (audit logging enabled)
-HTTP Client | Requests
-ORM | SQLAlchemy
-Environment Management | venv (Virtual Environment)
+| Component | Technology |
+|---------|------------|
+|Language | Python 3.11+|
+|Version Control | Git & GitHub|
+|Logging | Python Logging (audit logging enabled)|
+|HTTP Client | Requests|
+|ORM | SQLAlchemy|
+|Environment Management | venv (Virtual Environment)|
 
 ---
 
-### ☁️ Deployment (Planned)
+### ☁️ Deployment
+| Component | Technology |
+|---------|------------|
+|Hosting | Local (Current) → Cloud Deployment (Pending)|
+|Package Management | pip + requirements.txt|
+|Environment Variables | .env configuration|
+|Production Server | Uvicorn (ASGI)|
 
-Component | Technology
-Hosting | Local (Current) → Cloud Deployment (Pending)
-Package Management | pip + requirements.txt
-Environment Variables | .env configuration
-Production Server | Uvicorn (ASGI)
-
+---
 
 ## 🔐 RBAC Role Matrix
 
