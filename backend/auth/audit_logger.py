@@ -1,7 +1,11 @@
 import logging
 from pathlib import Path
+import os
 
-LOG_FILE = Path(__file__).parent / "access_audit.log"
+DATA_DIR = Path(os.getenv("DATA_DIR", "backend/auth"))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+LOG_FILE = DATA_DIR / "access_audit.log"
 
 logging.basicConfig(
     filename=LOG_FILE,
