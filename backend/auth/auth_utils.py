@@ -1,7 +1,11 @@
+import os
+from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from jose import jwt
 
-SECRET_KEY = "super-secret-key"
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 60
 

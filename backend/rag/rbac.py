@@ -3,7 +3,6 @@ from typing import Dict, List
 
 BASE_DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "Fintech-data"
 
-# Role → allowed document folders (PDF compliant)
 ROLE_DOCUMENT_MAP: Dict[str, List[str]] = {
     "finance": ["finance", "general"],
     "marketing": ["marketing", "general"],
@@ -12,7 +11,6 @@ ROLE_DOCUMENT_MAP: Dict[str, List[str]] = {
     "employees": ["general"],
     "c_level": ["finance", "marketing", "hr", "engineering", "general"],
 }
-
 
 def get_allowed_dirs(role: str) -> List[Path]:
     role = role.lower()
@@ -27,7 +25,6 @@ def get_allowed_dirs(role: str) -> List[Path]:
             
     return dirs
 
-# Used during preprocessing to attach RBAC metadata.
 def roles_for_department(department: str) -> List[str]:
     allowed_roles = []
     for role, folders in ROLE_DOCUMENT_MAP.items():

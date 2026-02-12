@@ -1,18 +1,14 @@
 import streamlit as st
 from api_client import login_user, query_backend
 
-# -----------------------------------
 # Page Config
-# -----------------------------------
 st.set_page_config(
     page_title="Company Internal Chatbot",
     page_icon="🏢",
     layout="wide",
 )
 
-# -----------------------------------
 # Session State
-# -----------------------------------
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
@@ -29,9 +25,7 @@ if "messages" not in st.session_state:
 if "welcome_shown" not in st.session_state:
     st.session_state.welcome_shown = False
 
-# -----------------------------------
 # Role → Departments (RBAC aligned)
-# -----------------------------------
 ROLE_DEPARTMENTS = {
     "finance": ["finance", "general"],
     "marketing": ["marketing", "general"],
@@ -41,9 +35,7 @@ ROLE_DEPARTMENTS = {
     "c_level": ["finance", "marketing", "hr", "engineering", "general"],
 }
 
-# =========================================================
 # 🔐 LOGIN PAGE
-# =========================================================
 def login_page():
     st.markdown(
         """
@@ -79,15 +71,13 @@ def login_page():
                     st.session_state.welcome_shown = False
                     st.rerun()
 
-# =========================================================
 # 🤖 CHATBOT PAGE
-# =========================================================
 def chatbot_page():
     user = st.session_state.user
     role = user["role"]
     departments = ROLE_DEPARTMENTS.get(role, [])
 
-    # ---------------- Sidebar
+    # Sidebar
     with st.sidebar:
         st.markdown("## 👤 User Panel")
         st.success("Logged in")
@@ -109,7 +99,7 @@ def chatbot_page():
             st.session_state.welcome_shown = False
             st.rerun()
 
-    # ---------------- Main Chat UI
+    # Main Chat UI
     st.title("🏢 Company Internal Chatbot")
 
     st.caption(
@@ -118,7 +108,7 @@ def chatbot_page():
     )
     st.markdown("---")
 
-    # ---------------- Welcome message (ONLY ONCE)
+    # Welcome message (ONLY ONCE)
     if not st.session_state.welcome_shown:
         st.session_state.messages.append(
             {
@@ -133,12 +123,12 @@ def chatbot_page():
         )
         st.session_state.welcome_shown = True
 
-    # ---------------- Chat History
+    # Chat History
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # ---------------- Chat Input
+    # Chat Input
     user_input = st.chat_input("Ask a question about company documents...")
 
     if user_input:
@@ -175,9 +165,7 @@ def chatbot_page():
         with st.chat_message("assistant"):
             st.markdown(assistant_text)
 
-# =========================================================
-# 🚦 ROUTER
-# =========================================================
+# ROUTER
 if not st.session_state.authenticated:
     login_page()
 else:

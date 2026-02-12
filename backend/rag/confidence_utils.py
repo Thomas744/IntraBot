@@ -1,8 +1,7 @@
 from typing import List, Tuple
 from langchain_core.documents import Document
 
-
-#    Confidence based on similarity scores. Lower distance = higher relevance.
+# Confidence based on similarity scores. Lower distance = higher relevance.
 def calculate_confidence_from_scores(
     results: List[Tuple[Document, float]],
 ) -> float:

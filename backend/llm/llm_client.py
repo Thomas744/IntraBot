@@ -15,7 +15,6 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 class LLMClient:
     def __init__(self):
         self.model = "gemini-2.5-flash"
-        # INCREASED OUTPUT LIMIT TO ALLOW FULL REPORTS
         self.config = types.GenerateContentConfig(
             temperature=0.2,
             max_output_tokens=2048, 

@@ -1,7 +1,6 @@
 from typing import List, Dict
 from langchain_core.documents import Document
 
-
 # Extracts unique source citations from retrieved documents.
 def extract_citations(documents: List[Document]) -> List[Dict]:
     

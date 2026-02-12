@@ -7,10 +7,8 @@ from backend.rag.rag_pipeline import rag_pipeline
 
 router = APIRouter()
 
-
 class QueryRequest(BaseModel):
     query: str
-
 
 @router.post("/query")
 def query_docs(

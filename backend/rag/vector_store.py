@@ -11,8 +11,6 @@ _COLLECTION_NAME = "company_docs"
 _embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 _vector_store: Chroma | None = None
 
-
-# Build vector store from scratch (used at app startup).
 def build_vector_store(documents: List[Document]) -> Chroma:
     
     global _vector_store
@@ -36,8 +34,6 @@ def build_vector_store(documents: List[Document]) -> Chroma:
 
     return _vector_store
 
-
-# Lazy-load vector store for query-time access.
 def get_vector_store() -> Chroma:
 
     global _vector_store

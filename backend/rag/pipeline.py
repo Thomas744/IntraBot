@@ -12,7 +12,6 @@ EXPECTED_FOLDERS = {
     "general",
 }
 
-
 def run_pipeline_once():
     directories = [d for d in BASE_DATA_PATH.iterdir() if d.is_dir()]
     folder_names = {d.name.lower() for d in directories}

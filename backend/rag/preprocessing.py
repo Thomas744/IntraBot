@@ -7,13 +7,10 @@ from langchain_core.documents import Document
 
 from backend.rag.rbac import roles_for_department
 
-# ✅ FIXED: Set to 256 to match the AI model's limit. 
-# This ensures NO data is ignored.
 MAX_TOKENS = 256  
 OVERLAP = 50      
 
 def _clean(text: str) -> str:
-    # Remove excessive formatting to save tokens
     text = re.sub(r"[-_]{3,}", " ", text)
     text = re.sub(r"(?:-\s*){5,}", " ", text)
     text = re.sub(r"\s+", " ", text)
@@ -21,7 +18,6 @@ def _clean(text: str) -> str:
 
 def _read_file(path: Path) -> str:
     if path.suffix == ".csv":
-        # Compact CSV format
         return pd.read_csv(path).to_string(index=False)
     if path.suffix in {".md", ".txt"}:
         return path.read_text(encoding="utf-8", errors="ignore")
@@ -47,7 +43,6 @@ def preprocess(directories: List[Path]) -> Dict:
             if not raw:
                 continue
 
-            # Tokenize the entire file first
             token_ids = tokenizer(
                 raw,
                 add_special_tokens=False,
@@ -58,7 +53,6 @@ def preprocess(directories: List[Path]) -> Dict:
             start = 0
             idx = 0
 
-            # Create overlapping chunks
             while start < len(token_ids):
                 end = min(start + MAX_TOKENS, len(token_ids))
                 chunk_ids = token_ids[start:end]
@@ -71,7 +65,7 @@ def preprocess(directories: List[Path]) -> Dict:
                         page_content=text,
                         metadata={
                             "chunk_id": f"{file.name}::chunk_{idx}",
-                            "source_path": str(file.name), # Store just filename for cleaner citations
+                            "source_path": str(file.name), 
                             "department": department,
                             "accessible_roles": ",".join(roles),
                         },
@@ -82,7 +76,6 @@ def preprocess(directories: List[Path]) -> Dict:
                 chunks_per_department[department] += 1
 
                 idx += 1
-                # Move window forward, but step back by OVERLAP to catch split context
                 start += (MAX_TOKENS - OVERLAP)
 
     return {
