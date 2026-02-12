@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from backend.routes import auth_routes, chat_routes
+from backend.routes.user_routes import router as user_router
 from backend.rag.pipeline import run_pipeline_once
 
 app = FastAPI(
@@ -24,6 +25,7 @@ def startup_event():
 
 app.include_router(auth_routes.router)
 app.include_router(chat_routes.router)
+app.include_router(user_router) 
 
 @app.get("/")
 def health():

@@ -1,12 +1,8 @@
 import streamlit as st
-from api_client import login_user, query_backend
+from api_client import login_user, query_backend, get_users, add_user_api, delete_user_api
 
 # Page Config
-st.set_page_config(
-    page_title="Company Internal Chatbot",
-    page_icon="🏢",
-    layout="wide",
-)
+st.set_page_config(page_title="Company Internal Chatbot",page_icon="🏢",layout="wide")
 
 # Session State
 if "authenticated" not in st.session_state:
@@ -21,11 +17,19 @@ if "user" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 🔑 flag to ensure welcome message shows only once
 if "welcome_shown" not in st.session_state:
     st.session_state.welcome_shown = False
 
-# Role → Departments (RBAC aligned)
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "chatbot"
+
+if "show_add_user" not in st.session_state:
+    st.session_state.show_add_user = False
+
+if "delete_confirm_user" not in st.session_state:
+    st.session_state.delete_confirm_user = None
+
+# Role → Departments
 ROLE_DEPARTMENTS = {
     "finance": ["finance", "general"],
     "marketing": ["marketing", "general"],
@@ -39,7 +43,7 @@ ROLE_DEPARTMENTS = {
 def login_page():
     st.markdown(
         """
-        <div style="text-align:center; padding-top:80px;">
+        <div style="text-align:center">
             <h1>🏢 Company Internal Chatbot</h1>
             <p>Secure role-based access to internal documents</p>
         </div>
@@ -69,7 +73,105 @@ def login_page():
                     }
                     st.session_state.messages = []
                     st.session_state.welcome_shown = False
+                    st.session_state.current_page = "chatbot"
                     st.rerun()
+
+
+# 👥 MANAGE USERS PAGE
+def manage_users_page():
+    st.title("👥 User Management")
+    st.caption("Manage company users and role assignments.")
+
+    users = get_users(st.session_state.token)
+
+    if not users:
+        st.error("Unable to fetch users.")
+        return
+
+    st.markdown("### 📋 Users")
+    st.markdown("---")
+
+    for u in users:
+        col1, col2, col3 = st.columns([3, 2, 1])
+
+        col1.markdown(f"**{u['username']}**")
+        col2.markdown(f"`{u['role'].upper()}`")
+
+        if u["username"] == st.session_state.user["username"]:
+            col3.markdown("—")
+        else:
+            if col3.button("🗑", key=f"del_{u['username']}"):
+                st.session_state.delete_confirm_user = u["username"]
+
+    # DELETE CONFIRMATION
+    if st.session_state.delete_confirm_user:
+        st.warning(
+            f"⚠ Are you sure you want to delete user "
+            f"**{st.session_state.delete_confirm_user}**?"
+        )
+
+        c1, c2 = st.columns(2)
+
+        if c1.button("✅ Yes, Delete"):
+            delete_user_api(
+                st.session_state.token,
+                st.session_state.delete_confirm_user,
+            )
+            st.session_state.delete_confirm_user = None
+            st.success("User deleted successfully.")
+            st.rerun()
+
+        if c2.button("❌ Cancel"):
+            st.session_state.delete_confirm_user = None
+            st.rerun()
+
+    st.markdown("---")
+
+    # ADD USER BUTTON
+    if not st.session_state.show_add_user:
+        if st.button("➕ Add New User"):
+            st.session_state.show_add_user = True
+            st.rerun()
+    else:
+        st.markdown("### ➕ Create New User")
+
+        with st.form("add_user_form"):
+            username = st.text_input("Username")
+            role = st.selectbox(
+                "Role",
+                [
+                    "finance",
+                    "marketing",
+                    "hr",
+                    "engineering",
+                    "employees",
+                    "c_level",
+                ],
+            )
+            password = st.text_input("Password", type="password")
+
+            submit = st.form_submit_button("Create User")
+
+            if submit:
+                response = add_user_api(
+                    st.session_state.token,
+                    username,
+                    role,
+                    password,
+                )
+
+                if response.status_code == 200:
+                    st.success("User created successfully.")
+                else:
+                    st.error("User already exists.")
+
+                st.session_state.show_add_user = False
+                st.rerun()
+
+        if st.button("⬅ Back"):
+            st.session_state.show_add_user = False
+            st.rerun()
+
 
 # 🤖 CHATBOT PAGE
 def chatbot_page():
@@ -91,15 +193,30 @@ def chatbot_page():
 
         st.markdown("---")
 
+        # TOGGLE BUTTON
+        if role == "c_level":
+            if st.session_state.current_page == "chatbot":
+                if st.button("👥 Manage Users"):
+                    st.session_state.current_page = "manage_users"
+                    st.rerun()
+            else:
+                if st.button("🤖 Chatbot"):
+                    st.session_state.current_page = "chatbot"
+                    st.rerun()
+
         if st.button("🚪 Logout"):
             st.session_state.authenticated = False
             st.session_state.token = None
             st.session_state.user = None
             st.session_state.messages = []
             st.session_state.welcome_shown = False
+            st.session_state.current_page = "chatbot"
             st.rerun()
 
-    # Main Chat UI
+    if st.session_state.current_page == "manage_users":
+        manage_users_page()
+        return
+
     st.title("🏢 Company Internal Chatbot")
 
     st.caption(
@@ -108,7 +225,6 @@ def chatbot_page():
     )
     st.markdown("---")
 
-    # Welcome message (ONLY ONCE)
     if not st.session_state.welcome_shown:
         st.session_state.messages.append(
             {
@@ -116,28 +232,24 @@ def chatbot_page():
                 "content": (
                     "👋 **Welcome to the Company Internal Chatbot**\n\n"
                     "I help you find **role-specific information** from internal company documents.\n\n"
-                    "You can ask about reports, metrics, summaries, or comparisons related to your department.\n\n"
-                    "💡 **Tip:** Ask clear questions with a *timeframe* or *metric* for best results."
+                    "💡 Ask clear questions with timeframe or metrics for best results."
                 ),
             }
         )
         st.session_state.welcome_shown = True
 
-    # Chat History
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-    # Chat Input
-    user_input = st.chat_input("Ask a question about company documents...")
+    user_input = st.chat_input(
+        "Ask a question about company documents..."
+    )
 
     if user_input:
         st.session_state.messages.append(
             {"role": "user", "content": user_input}
         )
-
-        with st.chat_message("user"):
-            st.markdown(user_input)
 
         response = query_backend(
             st.session_state.token,
@@ -162,8 +274,8 @@ def chatbot_page():
             {"role": "assistant", "content": assistant_text}
         )
 
-        with st.chat_message("assistant"):
-            st.markdown(assistant_text)
+        st.rerun()
+
 
 # ROUTER
 if not st.session_state.authenticated:
