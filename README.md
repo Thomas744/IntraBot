@@ -172,88 +172,176 @@ Role-Based Access Control (RBAC) is enforced at the **retrieval layer**, ensurin
 
 ---
 
-## 📌 Milestone 1 :  Environment Setup & Document Preprocessing
-- Project environment setup
-- Role → department access mapping
-- Document parsing (`.md`, `.csv`, `.txt`)
-- Text cleaning and normalization
-- Token-safe chunking
+## 🔐 RBAC Role Matrix
 
-## 📌 Milestone 2 :  Vector Database & Secure Retrieval
-- SentenceTransformer embeddings (MiniLM)
-- Persistent ChromaDB vector store
-- High-recall semantic retrieval
-- RBAC-safe post-retrieval filtering
-- Duplicate chunk suppression
+The system enforces **strict Role-Based Access Control (RBAC)** to ensure users can only access information permitted by their role.
 
-## 📌 Milestone 3 – Authentication, RBAC API & Secure RAG
-- FastAPI backend
-- JWT-based authentication
-- SQLite user database
-- bcrypt password hashing
-- RBAC-protected /query API
-- LLM-powered RAG responses
-- Source attribution
-- Confidence scoring
-- Audit logging
-- Hallucination prevention
-
-### ✅ Milestone 4: Frontend UI & End-to-End Integration 
-- Streamlit-based chat UI
-- Secure login workflow
-- Role-aware sidebar
-- Interactive chat interface
-- Citation display
-- Confidence-aware responses
-- End-to-end backend ↔ frontend integration
-- Verified RBAC behavior via UI
----
-
-## 📊 Current Results (Verified from Demo Runs)
-
-### ✅ Authorized Query Example
-
-```text
-User Role : Finance
-Query     : financial report revenue
-
-```
-
-- Finance-only documents retrieved  
-- Correct values returned  
-- Sources shown  
-- Confidence > 0  
-
-✔️ Only finance-authorized content was returned.
-
-### 🚫 Unauthorized Query Example
-
-```text
-User Role : Marketing
-Query     : employee salary
-
-```
-
-- Zero results returned  
-- Confidence = 0.0  
-- Access correctly blocked  
-
-✔️ Unauthorized access was correctly blocked with zero results.
-
-### 🚫 External Knowledge Query (Blocked)
-```text
-Query : What is the name of PM of India?
-```
-
-Response:
-```text
-The requested information is not available in the provided documents.
-```
-
-✔️ Hallucination prevented
-✔️ Grounding enforced
+Each document chunk is tagged with role metadata, and access is enforced at both the **API layer** and **vector retrieval layer**.
 
 ---
+
+## 📁 Project Structure
+```bash
+Chatbot/
+├── backend/
+│   ├── auth/                    # Authentication & authorization
+│   │   ├── auth_utils.py        # JWT creation & verification
+│   │   ├── password_utils.py    # bcrypt password hashing
+│   │   ├── dependencies.py      # Auth dependency (JWT → user)
+│   │   └── audit_logger.py      # Access audit logging
+│   │
+│   ├── db/                      # User database (SQLite)
+│   │   ├── database.py          # DB engine & session
+│   │   ├── models.py            # User table (username as PK)
+│   │   ├── user_repository.py   # DB access layer
+│   │   ├── init_db.py           # Add/Delete users interactively
+│   │   └── users.db             # SQLite user database
+│   │
+│   ├── rag/                     # RAG + RBAC pipeline
+│   │   ├── rbac.py              # Role → document access rules
+│   │   ├── preprocessing.py     # Parse, clean, chunk, metadata
+│   │   ├── vector_store.py      # Embeddings + ChromaDB
+│   │   ├── retriever.py         # Secure RBAC-aware retrieval
+│   │   ├── citation_utils.py    # Source attribution
+│   │   ├── confidence_utils.py  # Confidence scoring
+│   │   ├── rag_pipeline.py      # Full RAG orchestration
+│   │   ├── pipeline.py          # Vector-store build pipeline
+│   │   └── __init__.py
+│   │
+│   ├── llm/                     # LLM integration
+│   │   ├── llm_client.py        # HuggingFace LLM wrapper
+│   │   ├── prompt_templates.py  # Grounded prompt templates
+│   │   └── __init__.py
+│   │
+│   ├── models/
+│   │   └── user.py              # Pydantic User model
+│   │
+│   ├── routes/
+│   │   ├── auth_routes.py       # /login endpoint
+│   │   ├── chat_routes.py       # /query (RAG + RBAC)
+│   │   └── user_routes.py       # manage users (ADD/DELETE users)
+│   │
+│   └── main.py                  # FastAPI entry point
+│
+├── data/
+│   └── Fintech-data/
+│       ├── finance/
+│       ├── marketing/
+│       ├── hr/
+│       ├── engineering/
+│       └── general/
+│
+├── frontend/                 # Streamlit User Interface
+│   ├── api_client.py         # Connects UI to Backend
+│   └── streamlit_app.py      # Main UI Logic
+│
+├──  .env                     # Gemini Api and Backend Url
+├──  requirements.txt         # dependencies
+└── README.md
+```
+
+
+## 🚀 Installation
+
+### 🔧 1. Clone the Repository
+```bash
+git clone https://github.com/arman61-hub/IntraBot.git
+cd IntraBot
+```
+
+### 🧪 2. Create and Activate Virtual Environment
+
+It is recommended to use a Python virtual environment to isolate project dependencies.
+
+#### 🪟 Windows
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+#### 🐧 Linux / 🍎 macOS
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### ⚙️ 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 🔐 4. Configure Environment Variables
+Create a .env file and add:
+```bash
+GEMINI_API_KEY=
+JWT_SECRET_KEY=
+DEFAULT_ADMIN_USERNAME=admin
+DEFAULT_ADMIN_PASSWORD=admin123
+DEFAULT_ADMIN_ROLE=c_level
+FRONTEND_URL=http://localhost:8501
+DATA_DIR=/var/data
+
+BACKEND_URL=http://127.0.0.1:8000
+```
+
+### 🚀 5. Start Backend
+```bash
+python -m uvicorn backend.main:app --reload
+```
+- API: http://127.0.0.1:8000
+
+- Docs: http://127.0.0.1:8000/docs
+
+### 💻 6. Start Frontend
+```bash
+streamlit run frontend/streamlit_app.py  
+```
+- UI: http://localhost:8501
+
+## 🖼️ Screenshots
+
+The following screenshots demonstrate the key functionalities of the system, including authentication, role-based access control, and RAG-based responses.
+
+---
+
+### 🔐 User Login Interface
+Shows the Streamlit-based login screen where users authenticate using their credentials.
+
+![Login Screen](data/screenshots/login.png)
+
+---
+
+### 🚫 Role-Based Access Control (RBAC) – Access Denied (Wrong IDP)
+Illustrates access denial when a user attempts to authenticate or query the system using an incorrect or unauthorized Identity Provider (IDP).
+
+![Access Denied – Wrong IDP](data/screenshots/access_denied_wrong_idp.png)
+
+---
+
+### 💬 Chat Interface with RAG Response
+Demonstrates a successful query response generated using the RAG pipeline, including:
+- Context-aware answer
+- Source document attribution
+
+![Chat Interface](data/screenshots/chat_response.png)
+
+---
+
+## 🔑 Demo Credentials
+
+The system includes preconfigured demo users:
+
+
+| Username  | Password | Role        |
+|-----------|----------|-------------|
+| admin     | admin123 | C-Level     |
+| carol     | carol123 | HR          |
+| alice     | alice123 | Finance     |
+| eve       | eve123   | Employees   |
+| bob       | bob123   | Marketing   |
+| dave      | dave123  | Engineering |
+
+---
+
 
 ### 🖥️ Backend
 | Component | Technology |
@@ -314,234 +402,6 @@ The requested information is not available in the provided documents.
 
 ---
 
-### ☁️ Deployment
-| Component | Technology |
-|---------|------------|
-|Hosting | Local (Current) → Cloud Deployment (Pending)|
-|Package Management | pip + requirements.txt|
-|Environment Variables | .env configuration|
-|Production Server | Uvicorn (ASGI)|
-
----
-
-## 🔐 RBAC Role Matrix
-
-The system enforces **strict Role-Based Access Control (RBAC)** to ensure users can only access information permitted by their role.
-
-Each document chunk is tagged with role metadata, and access is enforced at both the **API layer** and **vector retrieval layer**.
-
----
-
-## 🧪 Running the Project
-From the project root:
-### Backend 
-```bash
-python -m uvicorn backend.main:app --reload
-```
-- API: http://127.0.0.1:8000
-
-- Docs: http://127.0.0.1:8000/docs
-
-
-### Frontend 
-```bash
-streamlit run frontend/streamlit_app.py  
-```
-- UI: http://localhost:8501
-
-## 📁 Project Structure (Current)
-```bash
-Chatbot/
-├── backend/
-│   ├── auth/                    # Authentication & authorization
-│   │   ├── auth_utils.py        # JWT creation & verification
-│   │   ├── password_utils.py    # bcrypt password hashing
-│   │   ├── dependencies.py      # Auth dependency (JWT → user)
-│   │   ├── audit_logger.py      # Access audit logging
-│   │   └── access_audit.log     # Auth access logs
-│   │
-│   ├── db/                      # User database (SQLite)
-│   │   ├── database.py          # DB engine & session
-│   │   ├── models.py            # User table (username as PK)
-│   │   ├── user_repository.py   # DB access layer
-│   │   ├── init_db.py           # Add/Delete users interactively
-│   │   └── users.db             # SQLite user database
-│   │
-│   ├── rag/                     # RAG + RBAC pipeline
-│   │   ├── rbac.py              # Role → document access rules
-│   │   ├── preprocessing.py     # Parse, clean, chunk, metadata
-│   │   ├── vector_store.py      # Embeddings + ChromaDB
-│   │   ├── retriever.py         # Secure RBAC-aware retrieval
-│   │   ├── citation_utils.py    # Source attribution
-│   │   ├── confidence_utils.py  # Confidence scoring
-│   │   ├── rag_pipeline.py      # Full RAG orchestration
-│   │   ├── pipeline.py          # Vector-store build pipeline
-│   │   └── __init__.py
-│   │
-│   ├── llm/                     # LLM integration
-│   │   ├── llm_client.py        # HuggingFace LLM wrapper
-│   │   ├── prompt_templates.py  # Grounded prompt templates
-│   │   └── __init__.py
-│   │
-│   ├── models/
-│   │   └── user.py              # Pydantic User model
-│   │
-│   ├── routes/
-│   │   ├── auth_routes.py       # /login endpoint
-│   │   └── chat_routes.py       # /query (RAG + RBAC)
-│   │
-│   └── main.py                  # FastAPI entry point
-│
-├── data/
-│   └── Fintech-data/
-│       ├── finance/
-│       ├── marketing/
-│       ├── hr/
-│       ├── engineering/
-│       └── general/
-│
-├── frontend/                 # Streamlit User Interface
-│   ├── api_client.py         # Connects UI to Backend
-│   └── streamlit_app.py      # Main UI Logic
-│
-├──  .env                     # Gemini Api and Backend Url
-├──  requirements.txt         # dependencies
-└── README.md
-```
-
-## ✅ Evaluation Criteria Mapping
-
-The project has been implemented to explicitly meet all evaluation criteria defined in the project specification. The table below maps each criterion to the corresponding implementation in the system.
-
----
-
-### 📊 Evaluation Matrix
-
-| Milestone | Evaluation Metric | Target | Implementation Evidence |
-|----------|------------------|--------|--------------------------|
-| Milestone 1 | Document parsing and metadata accuracy | 100% documents parsed, accurate role mapping | Preprocessing pipeline with validation tests and role-based metadata tagging |
-| Milestone 2 | Role-based access and search quality | Zero unauthorized access, retrieval latency < 500ms | RBAC enforced at API and vector search level using metadata filtering |
-| Milestone 3 | Authentication and RAG functionality | Secure auth, end-to-end response < 3s | JWT authentication, RAG pipeline with relevance guard and confidence scoring |
-| Milestone 4 | Frontend usability and deployment readiness | Intuitive UI, complete documentation, working demo | Streamlit UI, structured README, demo-ready GitHub repository |
-
----
-
-### 🔍 Verification Highlights
-
-- **Zero Unauthorized Access**  
-  Retrieval is filtered by accessible_roles before context is passed to LLM.
-
-- **Strict Grounding**  
-  If no relevant documents are retrieved, system returns fallback response.
-
-- **End-to-End Role Testing**  
-  Tested across finance, hr, marketing, engineering, employees, and c_level.
-
-- **Confidence Transparency**  
-  Responses include similarity-based confidence scoring.
-
-  This ensures the project is not only functional but also **fully aligned with evaluation expectations**.
-
----
-
-## 🚧 Limitations & Future Enhancements
-
-While the system successfully meets all project requirements, there are certain limitations and opportunities for improvement.
-
----
-
-### ⚠️ Current Limitations
-
-- **Single-Node Deployment**  
-  The system runs on a single machine and is not distributed across multiple servers.
-
-- **LLM Response Quality**  
-  The quality of generated answers depends on the capabilities of the FLAN-T5 model, which may struggle with very complex or ambiguous queries.
-
-- **Static Role Configuration**  
-  User roles and permissions are defined statically and require manual updates.
-
-- **Limited Language Support**  
-  The system currently supports English-language queries only.
-
----
-
-### 🚀 Future Enhancements
-
-- **Advanced Access Control**
-  - Introduce dynamic role management via an admin dashboard.
-  - Support fine-grained permissions at document or section level.
-
-- **Model Improvements**
-  - Integrate more powerful LLMs (e.g., LLaMA variants) for improved reasoning.
-  - Enable model selection based on query complexity.
-
-- **Scalability Enhancements**
-  - Deploy using Docker and container orchestration.
-  - Introduce distributed vector databases for large-scale document sets.
-
-- **Monitoring & Analytics**
-  - Add dashboards for access analytics and query trends.
-  - Track model performance and confidence score distributions.
-
-- **Multi-Language Support**
-  - Enable document ingestion and querying in multiple languages.
-
-These enhancements can further improve scalability, usability, and enterprise readiness.
-
----
-
-## 🖼️ Screenshots
-
-The following screenshots demonstrate the key functionalities of the system, including authentication, role-based access control, and RAG-based responses.
-
----
-
-### 🔐 User Login Interface
-Shows the Streamlit-based login screen where users authenticate using their credentials.
-
-![Login Screen](data/screenshots/login.png)
-
----
-
-### 🚫 Role-Based Access Control (RBAC) – Access Denied (Wrong IDP)
-Illustrates access denial when a user attempts to authenticate or query the system using an incorrect or unauthorized Identity Provider (IDP).
-
-![Access Denied – Wrong IDP](data/screenshots/access_denied_wrong_idp.png)
-
----
-
-### 💬 Chat Interface with RAG Response
-Demonstrates a successful query response generated using the RAG pipeline, including:
-- Context-aware answer
-- Source document attribution
-
-![Chat Interface](data/screenshots/chat_response.png)
-
----
-
-## 🔑 Demo Credentials
-
-The system includes preconfigured demo users:
-
-
-| Username  | Password | Role        |
-|-----------|----------|-------------|
-| admin     | admin123 | C-Level     |
-| carol     | carol123 | HR          |
-| alice     | alice123 | Finance     |
-| eve       | eve123   | Employees   |
-| bob       | bob123   | Marketing   |
-| dave      | dave123  | Engineering |
-
-User accounts can be created or deleted using the interactive database initialization utility:
-
-`python -m backend.app.db.init_db`
-
-This command allows administrators to securely manage user credentials and role assignments from the command line.
-
----
-
 ## 🔒 Security Considerations
 
 - **JWT-Based Authentication**  
@@ -574,23 +434,43 @@ This ensures secure handling of sensitive internal company data.
 
 ---
 
-## 🏁 Conclusion
+## 🤝 Contributing
 
-This project demonstrates the design and implementation of a secure, role-aware internal chatbot using Retrieval-Augmented Generation (RAG).
+We welcome contributions to improve **IntraBot**!
 
-Key Highlights:
-- End-to-end RBAC enforcement
-- Secure JWT authentication
-- Gemini-powered grounded responses
-- Source attribution with transparency
-- Confidence scoring for reliability
-- Modular, scalable architecture
-- Complete frontend integration
+### 🧩 How to Contribute
 
-The system satisfies all milestone requirements and provides a strong foundation for enterprise-grade internal knowledge assistants.
+#### 1. Fork the Repository  
+   Click the **Fork** button on the top right of this page.
+
+#### 2. Clone Your Fork 
+   Open terminal and run:
+   ```bash
+   git clone https://github.com/yourusername/IntraBot.git
+   cd IntraBot
+   ```
+
+#### 3. Create a feature branch:
+   Use a clear naming convention:
+   ```bash
+   git checkout -b feature/new-feature
+   ```
+   
+#### 4. Make & Commit Your Changes
+   Write clean, documented code and commit:
+   ```bash
+   git add .
+   git commit -m "✨ Added: your change description"
+   ```
+   
+#### 5. Push to GitHub & Submit PR
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+#### 6. Then go to your forked repo on GitHub and open a Pull Request.
 
 ---
 
-**Author:** Arman Redhu  
-**Project:** Company Internal Chatbot with RBAC & RAG  
-**Tech Stack:** FastAPI · Streamlit · ChromaDB · Sentence Transformers · Gemini API
+## ⭐ Motivation
+
+> 💡**PS:** If you found this project helpful or inspiring, please **[⭐ star the repository](https://github.com/arman61-hub/IntraBot)** — it keeps me motivated to build and share more awesome projects like this one!
