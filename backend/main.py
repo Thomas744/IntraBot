@@ -9,7 +9,7 @@ from backend.routes.user_routes import router as user_router
 from backend.rag.pipeline import run_pipeline_once
 from backend.rag.vector_store import PERSIST_DIR
 
-from backend.db.database import SessionLocal
+from backend.db.database import SessionLocal, engine, Base
 from backend.db.models import UserDB
 from backend.auth.password_utils import hash_password
 
@@ -68,6 +68,7 @@ def ensure_default_admin():
 def startup_event():
     print("Backend starting...")
 
+    Base.metadata.create_all(bind=engine)
     ensure_default_admin()
 
     persist_path = Path(PERSIST_DIR)
